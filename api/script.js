@@ -1,13 +1,16 @@
+// script.js
+document.addEventListener("DOMContentLoaded", function() {
+    redirectToRandomImage();
+});
+
 async function redirectToRandomImage() {
     try {
-        const params = new URLSearchParams(window.location.search);
-
-        let response = await fetch('images.txt');
+        let response = await fetch('../images.txt');
         let data = await response.text();
         let urls = data.split('\n').filter(url => url.trim() !== '');
-
         let selectedImageUrl;
 
+        const params = new URLSearchParams(window.location.search);
         // 根据ID参数选择URL
         if (params.has('id')) {
             let id = parseInt(params.get('id'), 10);
@@ -27,7 +30,10 @@ async function redirectToRandomImage() {
         if (params.has('json')) {
             showJsonResponse({ imageUrl: selectedImageUrl });
         } else {
-            window.location.href = selectedImageUrl;
+            // Use meta tag for redirection
+            document.getElementById("metaRedirect").setAttribute("content", `0;url=${selectedImageUrl}`);
+            // forward
+            // window.location.href = selectedImageUrl;
         }
 
     } catch (error) {
